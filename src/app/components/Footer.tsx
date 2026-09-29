@@ -36,7 +36,7 @@ export default function Footer() {
           <h4 className="mb-3 text-lg font-semibold text-[var(--text-dark)]">Contact</h4>
           <ul className="space-y-2 text-sm text-[var(--muted)]">
             <li className="flex items-start gap-2">
-              <Phone size={16} className="mt-1" /> <span>+91 9832122812</span>
+              <Phone size={16} className="mt-1" /> <span>+91 7797889051</span>
             </li>
             <li className="flex items-start gap-2">
               <Mail size={16} className="mt-1" /> <span>bagaichafarmsandventures@gmail.com</span>
