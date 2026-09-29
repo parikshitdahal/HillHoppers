@@ -13,7 +13,16 @@ export async function POST(req: Request) {
     const rating = String(formData.get('rating') || '').trim();
     const message = String(formData.get('message') || '').trim();
     const files = formData.getAll('media').filter((item): item is File => {
-      return typeof item === 'object' && item !== null && 'arrayBuffer' in item && 'name' in item && 'size' in item && Number(item.size) > 0;
+      return (
+        typeof item === 'object' &&
+        item !== null &&
+        'arrayBuffer' in item &&
+        'name' in item &&
+        'size' in item &&
+        'type' in item &&
+        Number(item.size) > 0 &&
+        String(item.type).startsWith('image/')
+      );
     });
 
     if (!name || !email || !phone || !message) {
@@ -39,7 +48,7 @@ export async function POST(req: Request) {
       <p><strong>Trip:</strong> ${trip}</p>
       ${rating ? `<p><strong>Rating:</strong> ${rating}/5</p>` : ''}
       <p><strong>Feedback:</strong><br/>${message}</p>
-      ${attachments.length ? `<p><strong>Uploaded media:</strong> ${attachments.length} file(s) attached.</p>` : ''}
+      ${attachments.length ? `<p><strong>Uploaded photos:</strong> ${attachments.length} file(s) attached.</p>` : ''}
     `;
 
     const text = `Client Feedback
@@ -48,7 +57,7 @@ Email: ${email}
 Phone: ${phone}
 Trip: ${trip}
 ${rating ? `Rating: ${rating}/5\n` : ''}Feedback: ${message}
-${attachments.length ? `Uploaded media: ${attachments.length} file(s) attached.\n` : ''}`;
+${attachments.length ? `Uploaded photos: ${attachments.length} file(s) attached.\n` : ''}`;
 
     await sendMail({
       subject: `[Feedback] ${trip} - ${name}`,

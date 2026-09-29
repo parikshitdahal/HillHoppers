@@ -16,6 +16,13 @@ const heroSlides = [
   { src: '/destinations/east.jpg', position: 'center 52%' },
 ]
 
+const travellerMoments = [
+  { src: '/gallery/north1.jpg', title: 'North Sikkim mornings', location: 'Lachen and Lachung route' },
+  { src: '/gallery/south1.jpg', title: 'Slow southern views', location: 'Namchi and Ravangla' },
+  { src: '/gallery/west1.jpg', title: 'West Sikkim stories', location: 'Pelling and Yuksom' },
+  { src: '/destinations/temi.jpg', title: 'Tea garden pauses', location: 'Temi and nearby valleys' },
+]
+
 const testimonials = [
   {
     name: 'Aarav Mehta',
@@ -324,6 +331,52 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
+
+
+      <section className="landing-section">
+        <div className="mb-10 flex flex-col gap-4 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
+          <div>
+            <p className="eyebrow mb-3">Traveller Gallery</p>
+            <h2 className="section-title text-3xl">Real moments from journeys we help shape</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)] sm:text-base">
+              A soft look at the kind of memories guests share after their trips. Soon, this section can feature approved client photos and feedback directly from the new feedback form.
+            </p>
+          </div>
+          <Link href="/contacts" className="link-brand text-sm font-semibold">
+            Share your feedback →
+          </Link>
+        </div>
+        <AutoScrollShowcase
+          items={travellerMoments}
+          intervalMs={4200}
+          getKey={(moment) => moment.src}
+          renderItem={(moment) => (
+            <div className="immersive-card group h-full">
+              <div className="relative h-[360px]">
+                <Image
+                  src={moment.src}
+                  alt={moment.title}
+                  width={900}
+                  height={1100}
+                  quality={95}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+                <div className="absolute inset-0 immersive-overlay" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <div className="mb-3 flex items-center gap-1 text-[var(--gold)]">
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <Star key={index} size={14} fill="currentColor" />
+                    ))}
+                  </div>
+                  <h3 className="text-2xl font-semibold leading-tight">{moment.title}</h3>
+                  <p className="mt-2 text-sm text-slate-100">{moment.location}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        />
       </section>
 
       <section className="landing-section pb-24">

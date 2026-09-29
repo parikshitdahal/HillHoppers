@@ -94,7 +94,7 @@ export default function FeedbackForm() {
                 </div>
                 <h2 className="text-3xl font-black leading-tight">Share your HillHoppers story with us.</h2>
                 <p className="mt-4 text-sm leading-6 text-slate-100">
-                  Add a few words, photos, or short videos from your journey. We review every submission before using it anywhere on the website.
+                  Add a few words and photos from your journey. We review every submission before using it anywhere on the website.
                 </p>
               </div>
               <div className="mt-8 space-y-3">
@@ -125,23 +125,33 @@ export default function FeedbackForm() {
             <input className="input-brand w-full p-3" name="trip" placeholder="Trip or package name" value={form.trip} onChange={onChange} />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-[0.6fr_1.4fr]">
-            <label className="input-brand flex items-center gap-3 p-3">
-              <Star className="text-[var(--accent)]" size={18} />
-              <select name="rating" value={form.rating} onChange={onChange} className="w-full bg-transparent outline-none">
-                <option value="5">5 stars</option>
-                <option value="4">4 stars</option>
-                <option value="3">3 stars</option>
-                <option value="2">2 stars</option>
-                <option value="1">1 star</option>
-              </select>
-            </label>
+          <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
+            <div className="input-brand flex flex-col gap-3 p-3">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Rating</span>
+              <div className="flex items-center gap-2" aria-label="Trip rating">
+                {[1, 2, 3, 4, 5].map((value) => {
+                  const active = Number(form.rating) >= value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setForm(prev => ({ ...prev, rating: String(value) }))}
+                      className={`rounded-full p-1 transition ${active ? 'text-[var(--gold)]' : 'text-[rgba(95,116,140,0.35)]'}`}
+                      aria-label={`${value} star rating`}
+                    >
+                      <Star size={22} fill={active ? 'currentColor' : 'none'} />
+                    </button>
+                  );
+                })}
+                <span className="ml-2 text-sm font-semibold text-[var(--text-dark)]">{form.rating}/5</span>
+              </div>
+            </div>
             <label className="input-brand flex cursor-pointer items-center gap-3 p-3">
-              <ImagePlus className="text-[var(--accent)]" size={18} />
+              <ImagePlus className="shrink-0 text-[var(--accent)]" size={18} />
               <span className="min-w-0 flex-1 truncate text-[var(--muted)]">
-                {files.length ? `${files.length} file(s) selected` : 'Upload photos or short videos'}
+                {files.length ? `${files.length} photo(s) selected` : 'Upload photos'}
               </span>
-              <input className="hidden" type="file" accept="image/*,video/*" multiple onChange={onFileChange} />
+              <input className="hidden" type="file" accept="image/*" multiple onChange={onFileChange} />
             </label>
           </div>
 
