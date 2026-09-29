@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import SuccessModal from '@/app/components/SuccessModal';
 
 const destinations = [
   { name: 'Gangtok', img: '/destinations/gangtok.jpg' },
@@ -49,7 +50,15 @@ export default function CustomPackagePage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('loading'); setError('');
+    setError('');
+
+    if (form.destinations.length === 0) {
+      setStatus('error');
+      setError('Please select at least one destination before sending your custom enquiry.');
+      return;
+    }
+
+    setStatus('loading');
 
     try {
       const res = await fetch('/api/mail/custom', {
@@ -82,6 +91,12 @@ export default function CustomPackagePage() {
 
   return (
     <div className="bg-page min-h-screen pt-24 px-4 sm:px-6 md:px-20 pb-16">
+      <SuccessModal
+        open={status==='success'}
+        title="Thank you, your custom trip request is with us"
+        message="We will study your destinations, dates, and preferences, then get back with a thoughtful HillHoppers plan."
+        onClose={() => setStatus('idle')}
+      />
       <div className="card-shell mx-auto mb-10 max-w-4xl rounded-[1.8rem] p-8 text-center">
         <p className="eyebrow mb-3">Made Around You</p>
         <h1 className="section-title text-3xl md:text-4xl">Plan A Journey Around Your Own Brief</h1>
@@ -95,13 +110,15 @@ export default function CustomPackagePage() {
         transition={{ duration: 0.4 }}
         className="card-shell max-w-4xl mx-auto rounded-[1.8rem] p-5 sm:p-8 md:p-12"
       >
-        {status==='success' && <div className="mb-4 rounded-xl border border-[rgba(34,197,94,0.28)] bg-[rgba(34,197,94,0.1)] px-4 py-3 text-center text-[var(--success)]">Your custom enquiry has been sent successfully.</div>}
         {status==='error' && <div className="mb-4 rounded-xl border border-[rgba(255,77,109,0.24)] bg-[rgba(255,77,109,0.1)] px-4 py-3 text-center text-[var(--pink)]">{error}</div>}
 
         <form onSubmit={onSubmit} className="space-y-8">
           {/* Pick Destinations */}
           <div>
-            <h2 className="mb-4 text-xl font-semibold text-[var(--accent)]">Select Your Destinations</h2>
+            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <h2 className="text-xl font-semibold text-[var(--accent)]">Select Your Destinations</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Required</p>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {destinations.map(({ name, img }) => (
                 <motion.div
@@ -127,6 +144,11 @@ export default function CustomPackagePage() {
                 </motion.div>
               ))}
             </div>
+            {status==='error' && error.includes('destination') && (
+              <p className="mt-3 rounded-xl border border-[rgba(255,77,109,0.24)] bg-[rgba(255,77,109,0.1)] px-4 py-3 text-sm text-[var(--pink)]">
+                {error}
+              </p>
+            )}
           </div>
 
           {/* Days & Stay Type */}
@@ -202,8 +224,12 @@ export default function CustomPackagePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input name="name" value={form.name} onChange={onChange} type="text" placeholder="Full name" className="input-brand p-3" required />
             <input name="email" value={form.email} onChange={onChange} type="email" placeholder="Email address" className="input-brand p-3" required />
-            <input name="phone" value={form.phone} onChange={onChange} type="text" placeholder="Phone number (optional)" className="input-brand p-3 sm:col-span-2" />
+            <input name="phone" value={form.phone} onChange={onChange} type="text" placeholder="Phone number" className="input-brand p-3 sm:col-span-2" required />
           </div>
+
+          {status==='error' && !error.includes('destination') && (
+            <p className="rounded-xl border border-[rgba(255,77,109,0.24)] bg-[rgba(255,77,109,0.1)] px-4 py-3 text-center text-[var(--pink)]">{error}</p>
+          )}
 
           <button
             type="submit"

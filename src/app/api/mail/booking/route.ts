@@ -15,9 +15,9 @@ export async function POST(req: Request) {
       message = '',
     } = await req.json();
 
-    if (!name || !email || !packageTitle) {
+    if (!name || !email || !phone || !packageTitle) {
       return NextResponse.json(
-        { success: false, error: 'Missing name, email, or packageTitle.' },
+        { success: false, error: 'Missing name, email, phone, or packageTitle.' },
         { status: 400 }
       );
     }
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       <h2>Curated Package Booking</h2>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+      <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>Package:</strong> ${packageTitle}</p>
       ${packageDuration ? `<p><strong>Duration:</strong> ${packageDuration}</p>` : ''}
       ${startDate ? `<p><strong>Start Date:</strong> ${startDate}</p>` : ''}
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     const text = `Curated Package Booking
 Name: ${name}
 Email: ${email}
-${phone ? `Phone: ${phone}\n` : ''}Package: ${packageTitle}
+Phone: ${phone}\nPackage: ${packageTitle}
 ${packageDuration ? `Duration: ${packageDuration}\n` : ''}${startDate ? `Start Date: ${startDate}\n` : ''}${endDate ? `End Date: ${endDate}\n` : ''}${stayType ? `Stay Type: ${stayType}\n` : ''}${message ? `Message: ${message}\n` : ''}
 `;
 

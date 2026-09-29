@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import SuccessModal from '@/app/components/SuccessModal';
 
 interface BookingFormProps {
   packageTitle: string;
@@ -67,7 +68,14 @@ export default function BookingForm({ packageTitle, packageDuration = '' }: Book
   };
 
   return (
-    <form onSubmit={onSubmit} className="card-shell space-y-6 rounded-[1.6rem] p-6">
+    <>
+      <SuccessModal
+        open={status === 'success'}
+        title="Thank you, your booking enquiry is with us"
+        message="We will check availability, route comfort, and stay preferences, then get back to you shortly."
+        onClose={() => setStatus('idle')}
+      />
+      <form onSubmit={onSubmit} className="card-shell space-y-6 rounded-[1.6rem] p-6">
       {/* Package context */}
       <div className="rounded-[1.2rem] border border-[rgba(17,24,39,0.08)] bg-[var(--surface-soft)] p-4">
         <p className="text-sm text-[var(--muted)]">
@@ -107,13 +115,14 @@ export default function BookingForm({ packageTitle, packageDuration = '' }: Book
 
       {/* Phone */}
       <div>
-        <label className="mb-2 block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Phone (optional)</label>
+        <label className="mb-2 block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Phone</label>
         <input
           className="input-brand w-full p-3 font-medium"
           name="phone"
-          placeholder="Phone number (optional)"
+          placeholder="Phone number"
           value={form.phone}
           onChange={onChange}
+          required
         />
       </div>
 
@@ -181,8 +190,8 @@ export default function BookingForm({ packageTitle, packageDuration = '' }: Book
       </button>
 
       {/* Status messages */}
-      {status === 'success' && <p className="rounded-xl border border-[rgba(34,197,94,0.28)] bg-[rgba(34,197,94,0.1)] px-4 py-3 text-center text-[var(--success)]">Your booking enquiry has been sent successfully.</p>}
       {status === 'error' && <p className="rounded-xl border border-[rgba(255,77,109,0.24)] bg-[rgba(255,77,109,0.1)] px-4 py-3 text-center text-[var(--pink)]">{error}</p>}
-    </form>
+      </form>
+    </>
   );
 }

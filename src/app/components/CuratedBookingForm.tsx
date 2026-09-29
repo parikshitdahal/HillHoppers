@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import SuccessModal from '@/app/components/SuccessModal';
 
 export interface CuratedBookingFormProps {
   packageTitle: string;   // e.g., pkg.title
@@ -46,7 +47,14 @@ export default function CuratedBookingForm({ packageTitle, duration }: CuratedBo
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card-shell space-y-6 rounded-[1.6rem] p-6">
+    <>
+      <SuccessModal
+        open={status === 'success'}
+        title="Thank you, your enquiry is with us"
+        message="We will review your package choice and get in touch shortly with the next step."
+        onClose={() => setStatus('idle')}
+      />
+      <form onSubmit={handleSubmit} className="card-shell space-y-6 rounded-[1.6rem] p-6">
       {/* Package context */}
       <div className="rounded-[1.2rem] border border-[rgba(17,24,39,0.08)] bg-[var(--surface-soft)] p-4">
         <p className="text-sm text-[var(--muted)]">
@@ -87,13 +95,14 @@ export default function CuratedBookingForm({ packageTitle, duration }: CuratedBo
 
       {/* Phone */}
       <div>
-        <label className="mb-2 block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Phone (optional)</label>
+        <label className="mb-2 block text-sm font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Phone</label>
         <input
           name="phone"
           value={form.phone}
           onChange={handleChange}
           type="text"
-          placeholder="Phone number (optional)"
+          placeholder="Phone number"
+          required
           className="input-brand w-full p-3 font-medium outline-none"
         />
       </div>
@@ -112,11 +121,6 @@ export default function CuratedBookingForm({ packageTitle, duration }: CuratedBo
       </div>
 
       {/* Status messages */}
-      {status === 'success' && (
-        <div className="rounded-xl border border-[rgba(34,197,94,0.28)] bg-[rgba(34,197,94,0.1)] p-3 text-sm text-[var(--success)]">
-          Your enquiry has been sent. We&apos;ll get in touch shortly.
-        </div>
-      )}
       {status === 'error' && (
         <div className="rounded-xl border border-[rgba(255,77,109,0.24)] bg-[rgba(255,77,109,0.1)] p-3 text-sm text-[var(--pink)]">
           {error}
@@ -132,6 +136,7 @@ export default function CuratedBookingForm({ packageTitle, duration }: CuratedBo
       >
         {status === 'loading' ? 'Sending…' : 'Send Enquiry'}
       </button>
-    </form>
+      </form>
+    </>
   );
 }

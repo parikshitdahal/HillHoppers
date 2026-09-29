@@ -1,4 +1,5 @@
 import nodemailer, { Transporter } from 'nodemailer';
+import type Mail from 'nodemailer/lib/mailer';
 
 let cachedTransporter: Transporter | null = null;
 
@@ -31,6 +32,7 @@ export async function sendMail({
   to,
   replyTo,
   from,
+  attachments,
 }: {
   subject: string;
   html: string;
@@ -38,6 +40,7 @@ export async function sendMail({
   to?: string;
   replyTo?: string;
   from?: string;
+  attachments?: Mail.Attachment[];
 }) {
   const transporter = getTransporter();
   const defaultFrom = from || `"${process.env.SITE_NAME || 'Website'}" <${process.env.SMTP_USER}>`;
@@ -54,5 +57,6 @@ export async function sendMail({
     html,
     text,
     replyTo,
+    attachments,
   });
 }

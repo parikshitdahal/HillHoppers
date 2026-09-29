@@ -15,15 +15,15 @@ export async function POST(req: Request) {
       message = '',
     } = await req.json();
 
-    if (!name || !email || !days || !Array.isArray(destinations) || destinations.length === 0) {
-      return NextResponse.json({ success: false, error: 'Missing name, email, days, or destinations.' }, { status: 400 });
+    if (!name || !email || !phone || !days || !Array.isArray(destinations) || destinations.length === 0) {
+      return NextResponse.json({ success: false, error: 'Missing name, email, phone, days, or destinations.' }, { status: 400 });
     }
 
     const html = `
       <h2>Custom Package Request</h2>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+      <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>Days:</strong> ${days}</p>
       ${startDate ? `<p><strong>Start Date:</strong> ${startDate}</p>` : ''}
       ${endDate ? `<p><strong>End Date:</strong> ${endDate}</p>` : ''}
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const text = `Custom Package Request
 Name: ${name}
 Email: ${email}
-${phone ? `Phone: ${phone}\n` : ''}Days: ${days}
+Phone: ${phone}\nDays: ${days}
 ${startDate ? `Start Date: ${startDate}\n` : ''}${endDate ? `End Date: ${endDate}\n` : ''}
 Destinations: ${destinations.join(', ')}
 ${stayType ? `Stay Type: ${stayType}\n` : ''}${message ? `Message: ${message}\n` : ''}
